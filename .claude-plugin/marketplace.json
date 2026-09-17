@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "crud-local",
+  "owner": {
+    "name": "sachithr7",
+    "email": "sachithr7@gmail.com"
+  },
+  "description": "Local marketplace for the Spring Boot product CRUD service and its MCP tooling.",
+  "plugins": [
+    {
+      "name": "crud-products",
+      "source": "./mcp-server",
+      "description": "MCP tools for the Spring Boot product CRUD service, with OAuth2 handled automatically."
+    }
+  ]
+}

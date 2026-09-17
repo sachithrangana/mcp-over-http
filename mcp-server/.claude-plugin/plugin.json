@@ -1,0 +1,10 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "crud-products",
+  "version": "2.0.0",
+  "description": "Read and modify the Spring Boot product catalogue over MCP (list, get, create, update, delete, health check). Signs in as a real user through a browser login and consent screen (OAuth2 authorization code + PKCE).",
+  "author": {
+    "name": "sachithr7",
+    "email": "sachithr7@gmail.com"
+  }
+}

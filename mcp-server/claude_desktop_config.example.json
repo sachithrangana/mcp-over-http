@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "crud": {
+      "command": "/Users/admin/Desktop/mcp-with-api/mcp-server/.venv/bin/python",
+      "args": ["/Users/admin/Desktop/mcp-with-api/mcp-server/server.py"],
+      "env": {
+        "CRUD_API_BASE_URL": "http://localhost:8080",
+        "CRUD_PLUGIN_CLIENT_ID": "crud-plugin",
+        "CRUD_SCOPE": "products.read products.write"
+      }
+    }
+  }
+}

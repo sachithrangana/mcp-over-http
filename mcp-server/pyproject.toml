@@ -1,0 +1,16 @@
+[project]
+name = "crud-mcp-server"
+version = "1.0.0"
+description = "MCP server exposing the Spring Boot product CRUD service as tools"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=2.2.0",
+    "httpx>=0.28",
+]
+
+[project.optional-dependencies]
+# Only the remote (HTTP) server needs to verify JWTs and run an ASGI server.
+remote = [
+    "pyjwt[crypto]>=2.9",
+    "uvicorn>=0.30",
+]

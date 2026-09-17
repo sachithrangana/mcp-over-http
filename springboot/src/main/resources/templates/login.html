@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in</title>
+  <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="card">
+  <h1>Sign in</h1>
+  <p class="sub">Authorize the CRUD Products plugin</p>
+
+  <div class="alert error" th:if="${param.error}">
+    That username and password did not match.
+  </div>
+  <div class="alert ok" th:if="${param.logout}">
+    You have been signed out.
+  </div>
+
+  <form method="post" th:action="@{/login}">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="username" autofocus required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+    <button type="submit">Sign in</button>
+  </form>
+
+  <p class="hint">Demo users: <code>alice</code> / <code>alice-secret</code> (read and write),
+    <code>bob</code> / <code>bob-secret</code> (read only).</p>
+</main>
+</body>
+</html>

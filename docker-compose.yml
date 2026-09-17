@@ -1,0 +1,42 @@
+# Both halves of the deployment. The API is also the OAuth authorization server,
+# so the MCP server cannot be deployed without it.
+#
+# PUBLIC_API_URL / PUBLIC_MCP_URL are the URLs a browser and Claude Code reach
+# from outside. They go into tokens (`iss`, `aud`) and the discovery documents,
+# so they must be the real public URLs, not the container names. Behind a proxy
+# or on a host, set them in a .env file next to this one.
+
+services:
+  api:
+    build: ./springboot
+    image: crud-api:latest
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      # Issuer clients see. Must match how they reach this service.
+      CRUD_ISSUER_URL: ${PUBLIC_API_URL:-http://localhost:8080}
+      # Audience stamped on tokens for the remote MCP server.
+      CRUD_MCP_RESOURCE_URL: ${PUBLIC_MCP_URL:-http://localhost:3000}
+      CRUD_MCP_REMOTE_CLIENT_ID: crud-mcp-remote
+
+  mcp:
+    build: ./mcp-server
+    image: crud-mcp:latest
+    restart: unless-stopped
+    ports:
+      - "${MCP_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      # Reached over the compose network for API calls...
+      CRUD_API_BASE_URL: http://api:8080
+      # ...but tokens are verified against the issuer clients actually used,
+      # so this must be the public URL, not http://api:8080.
+      CRUD_ISSUER_URL: ${PUBLIC_API_URL:-http://localhost:8080}
+      # JWKS is fetched server to server, so it may use the internal address.
+      CRUD_JWKS_URL: http://api:8080/oauth2/jwks
+      CRUD_MCP_PUBLIC_URL: ${PUBLIC_MCP_URL:-http://localhost:3000}
+      CRUD_REQUIRED_SCOPES: products.read
+      CRUD_MCP_PORT: "3000"

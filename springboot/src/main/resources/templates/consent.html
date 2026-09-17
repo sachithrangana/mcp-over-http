@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Authorize plugin</title>
+  <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="card">
+  <h1>Authorize access</h1>
+  <p class="sub">
+    <strong th:text="${clientName}">The plugin</strong> wants to act on the product
+    catalogue as <strong th:text="${principalName}">you</strong>.
+  </p>
+
+  <form method="post" th:action="@{/oauth2/authorize}">
+    <input type="hidden" name="client_id" th:value="${clientId}">
+    <input type="hidden" name="state" th:value="${state}">
+
+    <div th:if="${#lists.isEmpty(scopes)}" class="alert error">
+      Your account is not allowed to grant any of the requested permissions.
+      Deny below and sign in as a user that can.
+    </div>
+
+    <fieldset th:unless="${#lists.isEmpty(scopes)}">
+      <legend>Grant these permissions</legend>
+      <label class="check" th:each="choice : ${scopes}">
+        <input type="checkbox" name="scope" th:value="${choice.scope}" checked>
+        <span>
+          <span class="scope-name" th:text="${choice.description}">Permission</span>
+          <code th:text="${choice.scope}">scope</code>
+        </span>
+      </label>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="primary" th:unless="${#lists.isEmpty(scopes)}">Allow</button>
+      <button type="submit" class="secondary" name="scope" value="">Deny</button>
+    </div>
+  </form>
+
+  <p class="hint">Unchecking a permission issues a token without it. You can revoke access
+    by signing out or deleting the plugin's cached token.</p>
+</main>
+</body>
+</html>
